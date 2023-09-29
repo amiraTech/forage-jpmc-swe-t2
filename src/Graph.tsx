@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { Table } from '@finos/perspective';
 import { ServerRespond } from './DataStreamer';
 import './Graph.css';
-import 'perspective-viewer';
+import Perspective from '@finos/perspective';
+
+
 
 /**
  * Props declaration for <Graph />
@@ -28,7 +30,7 @@ class Graph extends Component<IProps, {}> {
   table: Table | undefined;
 
   render() {
-    return <perspective-viewer />
+   return React.createElement('perspective-viewer');
   }
 
   componentDidMount() {
@@ -50,29 +52,28 @@ class Graph extends Component<IProps, {}> {
       // Load the `table` in the `<perspective-viewer>` DOM reference.
 
       // Add more Perspective configurations here.
-      elem.load(this.table);
-      elem.setAttribute('view', 'y_line');
-      elem.setAttribute('column-pivots', '["stock"]');
-      elem.setAttribute('row-pivots', '["timestamp"]');
-      elem.setAttribute('columns', '["top_ask_price"]');
-      elem.setAttribute('aggregates', JSON.stringify({
-   "stock": "distinct count",
-   "top_ask_price": "avg",
-   "top_bid_price": "avg",
-   "timestamp": "distinct count"
-    }));
+     elem.load(this.table);
+     elem.setAttribute('view', 'y_line');
+     elem.setAttribute('column-pivots', '["stock"]');
+     elem.setAttribute('row-pivots', '["timestamp"]');
+     elem.setAttribute('columns', '["top_ask_price"]');
+     elem.setAttribute('aggregates', `
+     {"stock":"distinct count",
+     "top_ask_price":"avg",
+     "top_bid_price:"avg",
+     "timestamp":"distinct count"}`);
   }
 }
 
 
    componentDidUpdate() {
     if (this.table) {
-      this.table.update(this.props.data.map((el: ServerRespond) => {
+      this.table.update(this.props.data.map((el: any) => {
         return {
-         stock: el.stock,
-         top_ask_price: parseFloat(el.top_ask?.price.toString()) || 0.0,
-         top_bid_price: parseFloat(el.top_bid?.price.toString()) || 0.0,
-         timestamp: new Date(el.timestamp),
+        stock: el.stock,
+        top_ask_price: el.top_ask && el.top_ask.price || 0,
+        top_bid_price: el.top_bid && el.top_bid.price || 0,
+        timestamp: el.timestamp,
         };
       }));
     }

@@ -1,0 +1,18 @@
+Subject: [PATCH] 29/09/2023 - Task 2
+---
+Index: src/Graph.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Graph.tsx b/src/Graph.tsx
+--- a/src/Graph.tsx	(revision a9823006677f90394c16224308e75882f7f9e59c)
++++ b/src/Graph.tsx	(date 1695947596932)
+@@ -26,7 +26,6 @@
+  * parsed from its parent through data property.
+  */
+ class Graph extends Component<IProps, {}> {
+-
+   // Perspective table
+   table: Table | undefined;
+ 
